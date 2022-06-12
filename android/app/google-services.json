@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "977425343852",
+    "project_id": "firebass-module",
+    "storage_bucket": "firebass-module.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977425343852:android:850c954477f64f674dbf49",
+        "android_client_info": {
+          "package_name": "com.example.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "977425343852-qqceuvpbjhj1iir7jcq77ur062n4u07k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9ZlWsiyp0eVd1WcNxFaEm5nmY-FNPGT8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "977425343852-qqceuvpbjhj1iir7jcq77ur062n4u07k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
