@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget {
+  final Key key;
   final String _message;
   final bool _isMe;
+  final String _username;
 
-  const MessageBubble(this._message, this._isMe, {required Key key}) : super(key: key);
+  const MessageBubble(
+    this._message,
+    this._isMe,
+    this._username, {
+    required this.key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +22,13 @@ class MessageBubble extends StatelessWidget {
           decoration: BoxDecoration(
             color: _isMe ? Colors.grey[300] : Theme.of(context).accentColor,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12),
-              topRight: Radius.circular(12),
-              bottomLeft: _isMe ? Radius.circular(12) : Radius.circular(0),
-              bottomRight: _isMe ? Radius.circular(0) : Radius.circular(12),
+              topLeft: const Radius.circular(12),
+              topRight: const Radius.circular(12),
+              bottomLeft: _isMe ? const Radius.circular(12) : const Radius.circular(0),
+              bottomRight: _isMe ? const Radius.circular(0) : const Radius.circular(12),
             ),
           ),
-          width: 140,
+          width: 150,
           padding: const EdgeInsets.symmetric(
             vertical: 10,
             horizontal: 16,
@@ -30,11 +37,23 @@ class MessageBubble extends StatelessWidget {
             vertical: 4,
             horizontal: 8,
           ),
-          child: Text(
-            _message,
-            style: TextStyle(
-              color: _isMe ? Colors.black : Theme.of(context).accentTextTheme.headline1!.color,
-            ),
+          child: Column(
+            crossAxisAlignment: _isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: [
+              Text(
+                _username,
+                textAlign: _isMe ? TextAlign.end : TextAlign.start,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                _message,
+                style: TextStyle(
+                  color: _isMe ? Colors.black : Theme.of(context).accentTextTheme.headline1!.color,
+                ),
+              ),
+            ],
           ),
         ),
       ],
