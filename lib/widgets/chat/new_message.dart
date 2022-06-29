@@ -22,6 +22,7 @@ class _NewMessageState extends State<NewMessage> {
       'createdAt': Timestamp.now(),
       'userId': currentUser.uid,
       'username': userData['username'],
+      'userImage': userData['image_url'],
     });
     _controller.clear();
   }
@@ -38,12 +39,14 @@ class _NewMessageState extends State<NewMessage> {
               controller: _controller,
               decoration: const InputDecoration(labelText: 'Send a message...'),
               onChanged: (value) {
-                _enteredMessage = value;
+                setState(() {
+                  _enteredMessage = value;
+                });
               },
             ),
           ),
           IconButton(
-            onPressed: _enteredMessage.trim().isEmpty ? null : _sendMessage,
+            onPressed: _enteredMessage.isEmpty ? null : _sendMessage,
             icon: const Icon(Icons.send),
             color: Theme.of(context).primaryColor,
           )

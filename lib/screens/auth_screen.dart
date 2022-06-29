@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import '../widgets/auth/auth_form.dart';
 
@@ -17,8 +19,9 @@ class _AuthScreenState extends State<AuthScreen> {
 
   void _submitAuthForm(
     String email,
-    String username,
+    String? username,
     String password,
+    File? userImage,
     bool isLogin,
     BuildContext ctx,
   ) async {
@@ -38,9 +41,16 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
-        FirebaseFirestore.instance.collection('users').doc(authResult.user!.uid).set({
-          'username': username,
-          'email': email,
+
+        final ref = FirebaseStorage.instance.ref().child('user_images').child(authResult.user!.uid + '.jpg');
+        ref.putFile(userImage!).whenComplete(() async {
+          final url = await ref.getDownloadURL();
+
+          FirebaseFirestore.instance.collection('users').doc(authResult.user!.uid).set({
+            'username': username,
+            'email': email,
+            'image_url': url,
+          });
         });
       }
       setState(() {
@@ -54,10 +64,12 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         _isLoading = false;
       });
-      Scaffold.of(ctx).showSnackBar(SnackBar(
-        content: Text(message),
-        backgroundColor: Theme.of(ctx).errorColor,
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Theme.of(ctx).errorColor,
+        ),
+      );
     } catch (e) {
       var message = 'Something happened';
       if (e.toString() != '') {
@@ -66,10 +78,12 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         _isLoading = false;
       });
-      Scaffold.of(ctx).showSnackBar(SnackBar(
-        content: Text(message),
-        backgroundColor: Theme.of(ctx).errorColor,
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Theme.of(ctx).errorColor,
+        ),
+      );
     }
   }
 
