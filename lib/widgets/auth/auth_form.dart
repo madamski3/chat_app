@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import '../../pickers/image_selector.dart';
 
 class AuthForm extends StatefulWidget {
   final bool _isLoading;
@@ -6,6 +8,7 @@ class AuthForm extends StatefulWidget {
     String emailAddress,
     String username,
     String password,
+    File? userImage,
     bool isLogin,
     BuildContext ctx,
   ) _submitAuth;
@@ -22,10 +25,25 @@ class _AuthFormState extends State<AuthForm> {
   String? _userEmail = '';
   String? _userName = '';
   String? _userPassword = '';
+  File? _userImage;
+
+  void _setImage(File? image) {
+    _userImage = image;
+  }
 
   void _submitForm() {
     final isValid = _formkey.currentState?.validate();
     FocusScope.of(context).unfocus(); // Closes the keyboard
+
+    if (_userImage == null && !_isLoginMode) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Please select an image'),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+      return;
+    }
 
     if (isValid != null && isValid) {
       _formkey.currentState!.save();
@@ -33,12 +51,10 @@ class _AuthFormState extends State<AuthForm> {
         _userEmail!,
         _userName!,
         _userPassword!,
+        _userImage,
         _isLoginMode,
         context,
       );
-      // print(_userEmail);
-      // print(_userName);
-      // print(_userPassword);
     }
   }
 
@@ -55,6 +71,7 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
+                  if (!_isLoginMode) ImageSelector(_setImage),
                   TextFormField(
                     key: const ValueKey('email'),
                     validator: (value) {
@@ -98,7 +115,7 @@ class _AuthFormState extends State<AuthForm> {
                     obscureText: true,
                   ),
                   const SizedBox(height: 12),
-                  if (widget._isLoading) CircularProgressIndicator(),
+                  if (widget._isLoading) const CircularProgressIndicator(),
                   if (!widget._isLoading)
                     ElevatedButton(
                       onPressed: _submitForm,
