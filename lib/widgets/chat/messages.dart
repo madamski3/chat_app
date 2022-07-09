@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../chat/message_bubble.dart';
 
 class Messages extends StatelessWidget {
-  Messages({Key? key}) : super(key: key);
+  const Messages({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
